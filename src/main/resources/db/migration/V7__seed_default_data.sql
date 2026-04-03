@@ -1,0 +1,4 @@
+-- ═══════════════════════════════════════════════════════════════════════
+-- V7: Seed default data — ROLES AND SAMPLE RECORDS ONLY
+-- User seeding is done by DataSeeder.java to ensure correct BCrypt hashing
+-- ═══════════════════════════════════════════════════════════════════════

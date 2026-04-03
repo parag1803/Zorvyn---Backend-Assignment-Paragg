@@ -1,0 +1,84 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# Zorvyn Finance Dashboard — Base Configuration
+# ═══════════════════════════════════════════════════════════════════════════
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+
+spring:
+  application:
+    name: zorvyn-finance
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  # ── JPA / Hibernate ───────────────────────────────────────────────────
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc:
+          time_zone: UTC
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+        default_batch_fetch_size: 16
+
+  # ── Flyway ────────────────────────────────────────────────────────────
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+  # ── Jackson ───────────────────────────────────────────────────────────
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: UTC
+
+  # ── Lifecycle (graceful shutdown) ─────────────────────────────────────
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+# ── Actuator ──────────────────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+# ── OpenAPI / Swagger ─────────────────────────────────────────────────────
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+# ── Application-specific ─────────────────────────────────────────────────
+app:
+  jwt:
+    secret: ${JWT_SECRET:zorvyn-finance-super-secret-key-that-is-at-least-512-bits-long-for-hs512-algorithm-security}
+    access-token-expiry-ms: ${JWT_ACCESS_EXPIRY:900000}
+    refresh-token-expiry-ms: ${JWT_REFRESH_EXPIRY:604800000}
+    issuer: zorvyn-finance
+  rate-limit:
+    requests-per-minute: ${RATE_LIMIT_RPM:100}
+  idempotency:
+    ttl-hours: ${IDEMPOTENCY_TTL_HOURS:24}
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:5173}

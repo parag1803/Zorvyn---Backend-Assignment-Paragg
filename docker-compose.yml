@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: zorvyn-postgres
+    environment:
+      POSTGRES_DB: zorvyn_finance
+      POSTGRES_USER: zorvyn
+      POSTGRES_PASSWORD: zorvyn_secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zorvyn -d zorvyn_finance"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zorvyn-finance-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: zorvyn_finance
+      DB_USERNAME: zorvyn
+      DB_PASSWORD: zorvyn_secret
+      JWT_SECRET: zorvyn-finance-super-secret-key-that-is-at-least-512-bits-long-for-hs512-algorithm-security
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres_data:
