@@ -260,7 +260,7 @@ All `GET` operations use `@Transactional(readOnly = true)`, allowing Hibernate t
 
 **Interactive docs**: You can view the interactive Swagger UI and test the APIs by visiting: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
-![Swagger UI Screenshot](docs/swagger-ui.png)
+![Swagger UI Screenshot](Screenshot 2026-04-06 at 5.45.43 PM.svg)
 *(Please save the provided screenshot as `docs/swagger-ui.png` to display it here)*
 
 ---
