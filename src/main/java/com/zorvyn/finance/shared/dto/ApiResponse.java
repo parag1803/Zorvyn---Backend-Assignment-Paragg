@@ -13,7 +13,6 @@ import java.time.Instant;
  * @param <T> The type of the response payload
  */
 @Getter
-@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
 
@@ -21,9 +20,19 @@ public class ApiResponse<T> {
     private final String message;
     private final T data;
     private final String requestId;
+    private final Instant timestamp;
 
-    @Builder.Default
-    private final Instant timestamp = Instant.now();
+    private ApiResponse(Builder<T> builder) {
+        this.success = builder.success;
+        this.message = builder.message;
+        this.data = builder.data;
+        this.requestId = builder.requestId;
+        this.timestamp = builder.timestamp != null ? builder.timestamp : Instant.now();
+    }
+
+    public static <T> Builder<T> builder() {
+        return new Builder<>();
+    }
 
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
@@ -53,5 +62,21 @@ public class ApiResponse<T> {
                 .success(false)
                 .message(message)
                 .build();
+    }
+
+    public static class Builder<T> {
+        private boolean success;
+        private String message;
+        private T data;
+        private String requestId;
+        private Instant timestamp;
+
+        public Builder<T> success(boolean success) { this.success = success; return this; }
+        public Builder<T> message(String message) { this.message = message; return this; }
+        public Builder<T> data(T data) { this.data = data; return this; }
+        public Builder<T> requestId(String requestId) { this.requestId = requestId; return this; }
+        public Builder<T> timestamp(Instant timestamp) { this.timestamp = timestamp; return this; }
+
+        public ApiResponse<T> build() { return new ApiResponse<>(this); }
     }
 }
