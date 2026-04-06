@@ -47,7 +47,7 @@ Zorvyn Finance Dashboard is a RESTful backend API that allows users to:
 ## Architecture Decision
 
 ![Zorvyn Finance Architecture Component Diagram](zorvyn_finance_backend_architecture.svg)
-*(Please save your architecture diagram as `docs/architecture.png` to display it above)*
+
 
 ### Why Modular Monolith?
 
