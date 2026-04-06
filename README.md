@@ -46,6 +46,9 @@ Zorvyn Finance Dashboard is a RESTful backend API that allows users to:
 
 ## Architecture Decision
 
+![Zorvyn Finance Architecture Component Diagram](docs/architecture.png)
+*(Please save your architecture diagram as `docs/architecture.png` to display it above)*
+
 ### Why Modular Monolith?
 
 | Factor | Modular Monolith | Microservices |
@@ -255,7 +258,10 @@ All `GET` operations use `@Transactional(readOnly = true)`, allowing Hibernate t
 | PATCH | `/api/v1/users/{id}/status` | ADMIN | Change user status |
 | DELETE | `/api/v1/users/{id}` | ADMIN | Soft-delete user |
 
-**Interactive docs**: `http://localhost:8080/swagger-ui.html`
+**Interactive docs**: You can view the interactive Swagger UI and test the APIs by visiting: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+![Swagger UI Screenshot](docs/swagger-ui.png)
+*(Please save the provided screenshot as `docs/swagger-ui.png` to display it here)*
 
 ---
 
